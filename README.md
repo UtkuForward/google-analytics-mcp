@@ -1,185 +1,134 @@
-# Google Analytics MCP Server (Experimental)
+# Google Analytics MCP Server Setup ✅
 
-This repo contains the source code for running a local
-[MCP](https://modelcontextprotocol.io) server that interacts with APIs for
-[Google Analytics](https://support.google.com/analytics).
+This repository contains a fully configured Google Analytics MCP (Model Context Protocol) server that allows you to query your Google Analytics data through natural language using Gemini CLI.
 
-## Tools :hammer_and_wrench:
+## 🎉 Setup Complete!
 
-The server uses the
-[Google Analytics Admin API](https://developers.google.com/analytics/devguides/config/admin/v1)
-and
-[Google Analytics Data API](https://developers.google.com/analytics/devguides/reporting/data/v1)
-to provide several
-[Tools](https://modelcontextprotocol.io/docs/concepts/tools) for use with LLMs.
+Your Google Analytics MCP server is now fully configured and ready to use!
 
-### Retrieve account and property information :orange_circle:
+### What's Working:
+- ✅ Python 3.9.6 (compatible)
+- ✅ Google Analytics MCP server installed
+- ✅ Gemini CLI 0.1.15 installed
+- ✅ Gemini settings configured
+- ✅ Google Cloud credentials configured
+- ✅ MCP server responds correctly
 
-- `get_account_summaries`: Retrieves information about the user's Google
-  Analytics accounts and properties.
-- `get_property_details`: Returns details about a property.
-- `list_google_ads_links`: Returns a list of links to Google Ads accounts for
-  a property.
+## 🚀 How to Use
 
-### Run core reports :orange_book:
-
-- `run_report`: Runs a Google Analytics report using the Data API.
-- `get_custom_dimensions_and_metrics`: Retrieves the custom dimensions and
-  metrics for a specific property.
-
-### Run realtime reports :hourglass_flowing_sand:
-
-- `run_realtime_report`: Runs a Google Analytics realtime report using the
-  Data API.
-
-## Setup instructions
-
-Setup involves the following steps:
-
-1.  Configure Python.
-1.  Configure credentials for Google Analytics.
-1.  Configure Gemini.
-
-### Configure Python :snake:
-
-[Install pipx](https://pipx.pypa.io/stable/#install-pipx).
-
-### Enable APIs in your project :white_check_mark:
-
-[Follow the instructions](https://support.google.com/googleapi/answer/6158841)
-to enable the following APIs in your Google Cloud project:
-
-* [Google Analytics Admin API](https://console.cloud.google.com/apis/library/analyticsadmin.googleapis.com)
-* [Google Analytics Data API](https://console.cloud.google.com/apis/library/analyticsdata.googleapis.com)
-
-### Configure credentials :key:
-
-Configure your [Application Default Credentials
-(ADC)](https://cloud.google.com/docs/authentication/provide-credentials-adc).
-Make sure the credentials are for a user with access to your Google Analytics
-accounts or properties.
-
-Credentials must include the Google Analytics read-only scope:
-
-```
-https://www.googleapis.com/auth/analytics.readonly
+### 1. Launch Gemini CLI
+```bash
+gemini
 ```
 
-Check out
-[Manage OAuth Clients](https://support.google.com/cloud/answer/15549257)
-for how to create an OAuth client.
+### 2. Access MCP Servers
+In Gemini CLI, type:
+```
+/mcp
+```
 
-Here are some sample `gcloud` commands you might find useful:
+You should see `analytics-mcp` listed and connected (green status).
 
-- Set up ADC using user credentials and an OAuth desktop or web client after
-  downloading the client JSON to `YOUR_CLIENT_JSON_FILE`.
+### 3. Start Querying Your Data
+Try these sample prompts:
 
-  ```shell
-  gcloud auth application-default login \
-    --scopes https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform \
-    --client-id-file=YOUR_CLIENT_JSON_FILE
-  ```
+**Basic Information:**
+- `"what can the analytics-mcp server do?"`
+- `"Give me details about my Google Analytics property"`
 
-- Set up ADC using service account impersonation.
+**Account & Property Info:**
+- `"List my Google Analytics accounts"`
+- `"Show me my Google Analytics properties"`
 
-  ```shell
-  gcloud auth application-default login \
-    --impersonate-service-account=SERVICE_ACCOUNT_EMAIL \
-    --scopes=https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform
-  ```
+**Reports & Analytics:**
+- `"what are the most popular events in my Google Analytics property in the last 180 days?"`
+- `"were most of my users in the last 6 months logged in?"`
+- `"Show me real-time user activity"`
+- `"What are my custom dimensions and metrics?"`
 
-### Configure Gemini
+## 🛠️ Available Tools
 
-1.  Install [Gemini
-    CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/index.md)
-    or [Gemini Code
-    Assist](https://marketplace.visualstudio.com/items?itemName=Google.geminicodeassist)
+The MCP server provides these tools:
 
-1.  Create or edit the file at `~/.gemini/settings.json`, adding your server
-    to the `mcpServers` list.
+### Account & Property Management
+- `get_account_summaries` - List your GA accounts and properties
+- `get_property_details` - Get detailed property information
+- `list_google_ads_links` - List Google Ads account links
 
-    ```json
-    {
-      "mcpServers": {
-        "analytics-mcp": {
-          "command": "pipx",
-          "args": [
-            "run",
-            "--spec",
-            "git+https://github.com/googleanalytics/google-analytics-mcp.git",
-            "google-analytics-mcp"
-          ]
-        }
+### Reporting
+- `run_report` - Run custom Google Analytics reports
+- `run_realtime_report` - Get real-time analytics data
+- `get_custom_dimensions_and_metrics` - View custom dimensions and metrics
+
+## 📁 Files Created
+
+- `setup_instructions.md` - Detailed setup guide
+- `test_setup.py` - Verification script
+- `~/.gemini/settings.json` - Gemini CLI configuration
+
+## 🔧 Configuration Details
+
+### Gemini Settings
+Located at: `~/.gemini/settings.json`
+```json
+{
+  "mcpServers": {
+    "analytics-mcp": {
+      "command": "pipx",
+      "args": [
+        "run",
+        "--spec",
+        "git+https://github.com/googleanalytics/google-analytics-mcp.git",
+        "google-analytics-mcp"
+      ],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/Users/utkugulden/.config/gcloud/application_default_credentials.json"
       }
     }
-    ```
+  },
+  "selectedAuthType": "oauth-personal"
+}
+```
 
-1.  **Optional:** Configure the `GOOGLE_APPLICATION_CREDENTIALS` environment
-    variable in Gemini settings. You may want to do this if you always want to
-    use a specific set of credentials, regardless of which Application Default
-    Credentials are selected in your current environment.
+### Google Cloud Credentials
+- Location: `/Users/utkugulden/.config/gcloud/application_default_credentials.json`
+- Type: OAuth 2.0 Personal Account
+- Scopes: Google Analytics Read-Only
 
-    In `~/.gemini/settings.json`, add a `GOOGLE_APPLICATION_CREDENTIALS`
-    attribute to the `env` object. Replace `PATH_TO_ADC_JSON` in the following
-    example with the full path to the ADC JSON file you always want to use for
-    your MCP server.
+## 🧪 Testing
 
-    ```json
-    {
-      "mcpServers": {
-        "analytics-mcp": {
-          "command": "pipx",
-          "args": [
-            "run",
-            "--spec",
-            "git+https://github.com/googleanalytics/google-analytics-mcp.git",
-            "google-analytics-mcp"
-          ],
-          "env": {
-            "GOOGLE_APPLICATION_CREDENTIALS": "PATH_TO_ADC_JSON"
-          }
-        }
-      }
-    }
-    ```
+Run the verification script anytime to check your setup:
+```bash
+python3 test_setup.py
+```
 
-## Try it out :lab_coat:
+## 🔗 Useful Links
 
-Launch Gemini Code Assist or Gemini CLI and type `/mcp`. You should see
-`analytics-mcp` listed in the results.
+- [Google Analytics MCP Repository](https://github.com/googleanalytics/google-analytics-mcp)
+- [Google Cloud Console](https://console.cloud.google.com/)
+- [Google Analytics Admin API](https://developers.google.com/analytics/devguides/config/admin/v1)
+- [Google Analytics Data API](https://developers.google.com/analytics/devguides/reporting/data/v1)
 
-Here are some sample prompts to get you started:
+## 🆘 Troubleshooting
 
-- Ask what the server can do:
+### Common Issues:
 
-  ```
-  what can the analytics-mcp server do?
-  ```
+1. **MCP Server Disconnected**
+   - Run: `python3 test_setup.py` to verify setup
+   - Check Gemini settings: `cat ~/.gemini/settings.json`
 
-- Ask about a Google Analytics property
+2. **Authentication Errors**
+   - Verify credentials exist: `ls -la /Users/utkugulden/.config/gcloud/application_default_credentials.json`
+   - Re-authenticate with Google Cloud if needed
 
-  ```
-  Give me details about my Google Analytics property with 'xyz' in the name
-  ```
+3. **API Not Enabled**
+   - Enable Google Analytics Admin API and Data API in Google Cloud Console
 
-- Prompt for analysis:
+### Getting Help:
+- Check the `setup_instructions.md` file for detailed setup steps
+- Run the test script to identify issues
+- Ensure all prerequisites are met
 
-  ```
-  what are the most popular events in my Google Analytics property in the last 180 days?
-  ```
+---
 
-- Ask about signed-in users:
-
-  ```
-  were most of my users in the last 6 months logged in?
-  ```
-
-- Ask about property configuration:
-
-  ```
-  what are the custom dimensions and custom metrics in my property?
-  ```
-
-## Contributing
-
-Contributions welcome! See the [Contributing Guide](CONTRIBUTING.md).
+**Happy Analytics! 📊** Your Google Analytics data is now accessible through natural language queries in Gemini CLI.
